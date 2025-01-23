@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "excel-to-sharepoint-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/excelToSharepoint/ExcelToSharepointWebPart.js",
+          "manifest": "./src/webparts/excelToSharepoint/ExcelToSharepointWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "sp-init": {
+      "path": "https://intrrusttest.sharepoint.com/sites/Markos1/_layouts/15/init.js",
+      "globalName": "$_global_init"
+    },
+    "microsoft-ajax": {
+      "path": "https://intrrusttest.sharepoint.com/sites/Markos1/_layouts/15/MicrosoftAjax.js",
+      "globalName": "Sys",
+      "globalDependencies": [
+        "sp-init"
+      ]
+    },
+    "sp-runtime": {
+      "path": "https://intrrusttest.sharepoint.com/sites/Markos1/_layouts/15/SP.Runtime.js",
+      "globalName": "SP",
+      "globalDependencies": [
+        "microsoft-ajax"
+      ]
+    },
+    "sharepoint": {
+      "path": "https://intrrusttest.sharepoint.com/sites/Markos1/_layouts/15/SP.js",
+      "globalName": "SP",
+      "globalDependencies": [
+        "sp-runtime"
+      ]
+    }
+  },
+  "localizedResources": {
+    "ExcelToSharepointWebPartStrings": "lib/webparts/excelToSharepoint/loc/{locale}.js"
+  }
+}
