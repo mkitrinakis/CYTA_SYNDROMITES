@@ -1,0 +1,188 @@
+import { Version } from '@microsoft/sp-core-library';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+
+
+import styles from './ExcelToSharepointWebPart.module.scss';
+import {CsvUtils} from './csvUtils'; 
+//import {DocumentSetType} from './csvUtils'; 
+import {SharepointUtils} from './sharepointUtils'; 
+
+
+
+import * as fs from 'fs'; 
+
+
+
+
+export interface IExcelToSharepointWebPartProps {
+}
+
+export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExcelToSharepointWebPartProps> {
+  public render(): void {
+    this.domElement.innerHTML = `
+    <div class="${ styles.excelToSharepoint }">Hello from Outer Space4...
+    <br/> 
+  <div>
+  <input type="file" id="documentSets_fileInput">
+<hr/> 
+<div>
+   <button id='testButtonCreate'> Test Button Create v0.18 </button>
+</div>
+  <div class="${ styles.excelToSharepoint }" id="csvCheck" style="display:block">results of csv...</div>
+  </div>
+  <hr/><br/><hr/><br/>
+  
+  In the following section upload the files to be sent automatically to sharepoint 
+  <input type="file" id="pdfs_fileInput">
+<hr/> 
+<div>
+   <button id='testButtonUpload'> Test Button Upload v0.1 </button>
+</div>
+  `;
+
+
+
+    //SharepointUtils.createListItem(); 
+    this.setButtonEventHandlers(); 
+  }
+
+
+
+  private setButtonEventHandlers(): void {  
+    // const webPart: WpConfigureApplicationCustomizerWebPart = this;  
+    let btn : any; 
+       let btnCreate : any = document.getElementById('testButtonCreate'); 
+    if (btnCreate != null) {
+      btnCreate.addEventListener('click', this.createDocumentSets.bind(this)); 
+    }
+
+    let btnUpload : any = document.getElementById('testButtonUpload'); 
+    if (btnUpload != null) {
+      btnUpload.addEventListener('click', this.uploadPDFs.bind(this)); 
+    }
+ }; 
+
+
+  protected onInit(): Promise<void> {
+    return super.onInit();
+  }
+
+  protected get dataVersion(): Version {
+    return Version.parse('1.0');
+  }
+
+
+//   private testCreate() :void {
+// console.log ('starting...');
+// SharepointUtils.createDocumentSet_Old('docSet4'); 
+// //SharepointUtils.createDocumentSet('docSet1'); 
+// console.log ('... after call');
+//   }
+
+
+  private createDocumentSets(): void {
+    console.log('Hi test v0.5.') ; 
+    
+    let files : FileList | null = (document.getElementById('documentSets_fileInput') as HTMLInputElement)?.files ; 
+    let csvCheck: HTMLDivElement  = (document.getElementById('csvCheck') as HTMLDivElement); 
+    csvCheck.innerHTML = 'START2!' ; 
+   if (files) {
+    const file = files[0]; 
+    if (file) {
+      csvCheck.innerHTML = 'Starting process....<br/>' ; 
+      CsvUtils.processCsv (file, csvCheck, SharepointUtils.createDocumentSets); 
+     
+      //SharepointUtils.createDocumentSets (rs) ; 
+      }
+      else {
+       const csvData: any[] = [];
+       console.log(csvData); 
+      }
+   }    
+  }
+
+  //https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+
+  private  _arrayBufferToBase64( buffer : ArrayBuffer) : string {
+    return ArrayBuffer.toString()
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
+
+  private uploadPDFs() : void {
+
+    let files : FileList | null = (document.getElementById('pdfs_fileInput') as HTMLInputElement)?.files ; 
+    if (files != null) {
+      let file: File = files[0]; 
+     
+      const fileReader = new FileReader();
+      //let rs:string = 'to process!'; 
+       fileReader.onload = () => {
+          const fileContent = fileReader.result as ArrayBuffer;
+          let fileCreationInfo : SP.FileCreationInformation = new SP.FileCreationInformation() ; 
+
+          var base64 = btoa(
+            new Uint8Array(fileContent)
+              .reduce((data, byte) => data + String.fromCharCode(byte), '')
+          );
+          let b64 : SP.Base64EncodedByteArray = new SP.Base64EncodedByteArray(base64); 
+          fileCreationInfo.set_content(b64); 
+     fileCreationInfo.set_overwrite(true); 
+     fileCreationInfo.set_url('testfileName.pdf'); 
+     let context: SP.ClientContext = SP.ClientContext.get_current(); 
+     var targetFolder = context.get_web().getFolderByServerRelativeUrl('/sites/Markos1/lib1');  
+     var uploadFile = targetFolder.get_files().add(fileCreationInfo) ; 
+          }
+          fileReader.readAsText(file, 'utf-8' );
+     
+     
+    }
+ 
+
+    
+    reader.readAsDataURL(file);
+    {  
+            content = System.IO.File.ReadAllBytes(uploadFilePath),  
+            Overwrite = true,  
+            Url = Path.GetFileName(uploadFilePath)  
+    };  
+   
+    if (files) {
+      const file = files[0]; 
+      if (file) {
+    return ; 
+  }
+
+  private processCSV(toCheck : boolean): void {
+    console.log('Hi') ; 
+   //  let files : FileList | null = (document.getElementById('Hello_fileInput') as HTMLInputElement)?.files ; 
+  //  if (files) {
+  //   const file = files[0]; 
+  //   if (file) {
+  //     let rs:string = CsvUtils.processCsv(file, true); 
+  //     let csvCheck : HTMLDivElement | null = document.getElementById('csvCheck') as HTMLDivElement; 
+  //     if (csvCheck) {
+  //      csvCheck.innerHTML = rs ; 
+  //      SharepointUtils.checkFolderExists (['1','2','3','4']); 
+       
+  //     }
+  //     }
+  //     else {
+  //      const csvData: any[] = [];
+  //      console.log(csvData); 
+  //     }
+  //   }    
+   }
+
+
+
+  }
+
+
+
+

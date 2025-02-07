@@ -3,7 +3,7 @@
   "solution": {
     "name": "cyta-syndromites-client-side-solution",
     "id": "45c2d71d-2407-454f-bdb3-3c93013042aa",
-    "version": "1.0.0.0",
+    "version": "2.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "cyta-syndromites Feature",
         "description": "The feature that activates elements of the cyta-syndromites solution.",
         "id": "09ff2c61-fbc8-4dde-8362-18e26c1769ca",
-        "version": "1.0.0.0"
+        "version": "2.0.0.0"
       }
     ]
   },

@@ -46,8 +46,8 @@ ctx.executeQueryAsync(
 } 
 
 
-public static async createDocumentSets(documentSets: DocumentSetType[]) {
-console.log ('createDocumentSets starting...'); 
+public static async createDocumentSets(documentSets: DocumentSetType[], csvCheck:HTMLDivElement) {
+console.log ('createDocumentSets v 1.1 starting...'); 
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle('lib1')
    ctx.load(documentLibrary) ; 
@@ -70,9 +70,11 @@ console.log ('createDocumentSets starting...');
             newListItem.update(); 
    ctx.load(newListItem); 
    ctx.executeQueryAsync(() => {
-      console.log("Success"); } , 
+      console.log("Success"); 
+      csvCheck.innerHTML = csvCheck.innerHTML + el.Title + ' SUCCESS <br/>' ; } , 
       (e) => {
          console.log("Error" + e + '-->' + el.Title);
+         csvCheck.innerHTML = csvCheck.innerHTML + `<font color='red'>` +  el.Title + ` ERROR </font><br/>` ; 
        });
        console.log ('next'); 
    });
