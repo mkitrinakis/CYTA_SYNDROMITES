@@ -8,7 +8,7 @@ import {DocumentSetType} from './csvUtils';
 export abstract class SharepointUtils {
 
 
-
+ΝΑ ΔΩ ΠΩΣ ΑΛΛΑΖΩ ΤΟ LIMIT ΤΩΝ 2MB? 
 public static checkFolderExists(folderNames: string[] )  {
   //  const siteUrl : string = 'https://intrrusttest.sharepoint.com/sites/Markos1'; 
  //   const clientContext: SP.ClientContext = new SP.ClientContext(siteUrl);
@@ -116,6 +116,100 @@ public static async createDocumentSet(folderName: string, description:string) {
        });
 }
 
+
+
+
+public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement): Promise<void> {
+  
+    
+   const clientContext = SP.ClientContext.get_current();
+   const web = clientContext.get_web();
+   let lib1: SP.List = web.get_lists().getByTitle('lib1'); 
+   let rootFolder: SP.Folder = lib1.get_rootFolder(); 
+   await clientContext.load(web); 
+   await clientContext.load (lib1); 
+   await clientContext.load (rootFolder, 'ServerRelativeUrl'); 
+   await clientContext.executeQueryAsync();
+   
+   let basicPath : string = rootFolder.get_serverRelativeUrl(); 
+
+     
+   function uploadFileSequentially(index: number): void {
+       if (index >= files.length) {
+           console.log("Finished Uploading.");
+           return;
+       }
+ 
+       const file = files[index];
+       const reader = new FileReader();
+ 
+       reader.onload = async function (event) {
+           const arrayBuffer = event.target?.result as ArrayBuffer;
+           const fileCreateInfo = new SP.FileCreationInformation();
+           fileCreateInfo.set_content(new SP.Base64EncodedByteArray());
+           clientContext.load(web, 'ServerRelativeUrl'); 
+           
+
+           
+           // Convert ArrayBuffer to Base64 and set content
+           const byteArray = new Uint8Array(arrayBuffer);
+           for (let i = 0; i < byteArray.length; i++) {
+               fileCreateInfo.get_content().append(byteArray[i]);
+           }
+ 
+           fileCreateInfo.set_url(file.name);
+           
+           
+           fileCreateInfo.set_overwrite(true);
+ 
+           // Upload file to SharePoint document library
+           //const uploadFile = list.get_rootFolder().get_files().add(fileCreateInfo);
+           let  subFolderUrl : string = file.name.split('.')[0] ;
+           subFolderUrl = basicPath + "/" + subFolderUrl ; 
+           //subFolderUrl = basicPath; 
+    // console.log (subFolderUrl) ; 
+           //list.get_rootFolder().get_folders().getByUrl (subFolderUrl); 
+           let subFolder: SP.Folder  = web.getFolderByServerRelativeUrl (subFolderUrl) ;
+           //let subFolder: SP.Folder = web.get_folders().gfet(subFolderUrl); 
+           clientContext.load (subFolder); 
+           
+           await clientContext.executeQueryAsync(); 
+         
+           
+           let uploadFile : SP.File  ; 
+         
+             
+              uploadFile = subFolder.get_files().add(fileCreateInfo);
+         
+          
+           try {
+           clientContext.load(uploadFile );
+           clientContext.executeQueryAsync(
+               () => {
+                 let msg : string = `File ${index + 1}/${files.length} : ${file.name} --> Φορτώθηκε Επιτυχώς: ${file.name}`; 
+                   console.log(msg);
+                   pdfCheck.innerHTML = pdfCheck.innerHTML + ` <br/>`  + msg ;   
+                   uploadFileSequentially(index + 1); // Upload next file
+               },
+               (sender, args) => {
+                 let msg : string = `Πρόβλημα στο αρχείο ${file.name}: ${args.get_message()}`; 
+                   console.error(msg);
+                   pdfCheck.innerHTML = pdfCheck.innerHTML + `<br/><font color='red'>` + msg + `</font>`; 
+               }
+           );
+         }
+         catch (e) { console.log ('cannot find folder:' + subFolderUrl)} ; 
+       };
+ 
+       reader.readAsArrayBuffer(file);
+   }
+   uploadFileSequentially(0);
+   // Start uploading files sequentially
+   // for (let i : number = 0; i< files.length ; i++ ) {
+   // uploadFileSequentially(i);
+   //}
+ }
+ 
 
 
 
