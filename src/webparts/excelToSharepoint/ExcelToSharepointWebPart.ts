@@ -22,21 +22,27 @@ export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExc
     this.domElement.innerHTML = `
     <div class="${ styles.excelToSharepoint }">Hello from Outer Space4...
     <br/> 
-  <div>
-  <input type="file" id="documentSets_fileInput">
-<hr/> 
-<div>
-   <button id='btnCreate'> Test Button Create v0.19 </button>
-</div>
-  <div class="${ styles.excelToSharepoint }" id="csvCheck" style="display:block">results of csv...</div>
+    <input type="file" id="documentSets_fileInput">
   </div>
-  <hr/><br/><hr/><br/>
   
+<hr/> 
+<br/> 
+<div>
+   <button id='btnCreate'> Test Button Create v0.22 </button>
+</div>
+<br/> 
+  <div class="${ styles.excelToSharepoint }" id="csvCheck" style="display:block">results of csv...</div>
+  
+  <hr/><br/><hr/><br/>
+
+<div>  
   In the following section upload the files to be sent automatically to sharepoint 
+<br/> 
   <input type="file" id="pdfs_fileInput" multiple>
 <hr/> 
+</div> 
 <div>
-   <button id='btnUpload'> Test Button Upload v0.21 </button>
+   <button id='btnUpload'> Test Button Upload v0.29 </button>
 </div>
  <div class="${ styles.excelToSharepoint }" id="pdfCheck" style="display:block">results of pdf Upload...</div>
   `;
@@ -115,96 +121,7 @@ export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExc
   }
   
 
-  private async  processPDFs_OLD(files : File[], pdfCheck:HTMLDivElement): Promise<void> {
-  
-    
-    const clientContext = SP.ClientContext.get_current();
-    const web = clientContext.get_web();
-    let lib1: SP.List = web.get_lists().getByTitle('lib2'); 
-    let rootFolder: SP.Folder = lib1.get_rootFolder(); 
-    await clientContext.load(web); 
-    await clientContext.load (lib1); 
-    await clientContext.load (rootFolder, 'ServerRelativeUrl'); 
-    await clientContext.executeQueryAsync();
-    
-    let basicPath : string = rootFolder.get_serverRelativeUrl(); 
-
-      
-    function uploadFileSequentially(index: number): void {
-        if (index >= files.length) {
-            console.log("Finished Uploading.");
-            return;
-        }
-  
-        const file = files[index];
-        const reader = new FileReader();
-  
-        reader.onload = async function (event) {
-            const arrayBuffer = event.target?.result as ArrayBuffer;
-            const fileCreateInfo = new SP.FileCreationInformation();
-            fileCreateInfo.set_content(new SP.Base64EncodedByteArray());
-            clientContext.load(web, 'ServerRelativeUrl'); 
-            
-
-            
-            // Convert ArrayBuffer to Base64 and set content
-            const byteArray = new Uint8Array(arrayBuffer);
-            for (let i = 0; i < byteArray.length; i++) {
-                fileCreateInfo.get_content().append(byteArray[i]);
-            }
-  
-            fileCreateInfo.set_url(file.name);
-            //fileCreateInfo.set_url('https://intrrusttest.sharepoint.com/sites/Markos1/lib1/1311/1311.xlsx');
-            
-            fileCreateInfo.set_overwrite(true);
-  
-            // Upload file to SharePoint document library
-            //const uploadFile = list.get_rootFolder().get_files().add(fileCreateInfo);
-            let  subFolderUrl : string = file.name.split('.')[0] ;
-            subFolderUrl = basicPath + "/" + subFolderUrl ; 
-            //subFolderUrl = basicPath; 
-     // console.log (subFolderUrl) ; 
-            //list.get_rootFolder().get_folders().getByUrl (subFolderUrl); 
-            let subFolder: SP.Folder  = web.getFolderByServerRelativeUrl (subFolderUrl) ;
-            //let subFolder: SP.Folder = web.get_folders().gfet(subFolderUrl); 
-            clientContext.load (subFolder); 
-            
-            await clientContext.executeQueryAsync(); 
-          
-            
-            let uploadFile : SP.File  ; 
-          
-              
-               uploadFile = subFolder.get_files().add(fileCreateInfo);
-          
-           
-            try {
-            clientContext.load(uploadFile );
-            clientContext.executeQueryAsync(
-                () => {
-                  let msg : string = `File ${index + 1}/${files.length} : ${file.name} --> Φορτώθηκε Επιτυχώς: ${file.name}`; 
-                    console.log(msg);
-                    pdfCheck.innerHTML = pdfCheck.innerHTML + ` <br/>`  + msg ;   
-                    uploadFileSequentially(index + 1); // Upload next file
-                },
-                (sender, args) => {
-                  let msg : string = `Πρόβλημα στο αρχείο ${file.name}: ${args.get_message()}`; 
-                    console.error(msg);
-                    pdfCheck.innerHTML = pdfCheck.innerHTML + `<br/><font color='red'>` + msg + `</font>`; 
-                }
-            );
-          }
-          catch (e) { console.log ('cannot find folder:' + subFolderUrl)} ; 
-        };
-  
-        reader.readAsArrayBuffer(file);
-    }
-    uploadFileSequentially(0);
-    // Start uploading files sequentially
-    // for (let i : number = 0; i< files.length ; i++ ) {
-    // uploadFileSequentially(i);
-    //}
-  }
+ 
   }
 
 
