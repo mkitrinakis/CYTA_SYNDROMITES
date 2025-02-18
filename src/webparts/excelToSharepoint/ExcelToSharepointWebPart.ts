@@ -19,8 +19,8 @@ export interface IExcelToSharepointWebPartProps {
 
 export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExcelToSharepointWebPartProps> {
   public render(): void {
-    this.domElement.innerHTML = `
-    <div class="${ styles.excelToSharepoint }">Hello from Outer Space4...
+let old: string = `
+<div class="${ styles.cytaSyndromites }">Hello from Outer Space4...
     <br/> 
     <input type="file" id="documentSets_fileInput">
   </div>
@@ -31,7 +31,7 @@ export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExc
    <button id='btnCreate'> Test Button Create v0.22 </button>
 </div>
 <br/> 
-  <div class="${ styles.excelToSharepoint }" id="csvCheck" style="display:block">results of csv...</div>
+  <div class="${ styles.cytaSyndromites }" id="csvCheck" style="display:block">results of csv...</div>
   
   <hr/><br/><hr/><br/>
 
@@ -44,7 +44,42 @@ export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExc
 <div>
    <button id='btnUpload'> Test Button Upload v0.29 </button>
 </div>
- <div class="${ styles.excelToSharepoint }" id="pdfCheck" style="display:block">results of pdf Upload...</div>
+ <div class="${ styles.cytaSyndromites }" id="pdfCheck">results of pdf Upload...</div>
+`
+
+
+    this.domElement.innerHTML = `
+<div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν
+    <br/> 
+    <input type="file" id="documentSets_fileInput">
+    <hr/> 
+<br/> 
+
+ Και στη συνέχεια επιλέξτε το παρακάτω button για τη δημιουργία των Binders:  
+   <button id='btnCreate'> Δημιουργία Binders </button>
+
+  
+
+<br/> 
+  <div class="${ styles.cytaSyndromites } "${ styles.cytaSyndromitesResults }" id="csvCheck">Αποτελέσματα της διαδικασίας δημιουργίας Binders...</div>
+  
+  <hr/><br/><hr/><br/>
+
+<div class="${ styles.cytaSyndromites }">  
+  Παρακάτω επιλέξτε το σύνολο των pdf που θέλετε να ανέβουν αυτοματοποιημένα στα ανάλογα folders. <span class="${styles.cytaSyndromitesAlert}">ΠΡΟΣΟΧΗ</span> δεν πρέπει να είναι μεγαλύτερα των 2MB
+<br/> 
+  <input type="file" id="pdfs_fileInput" multiple>
+<hr/> 
+<br/> 
+Και στη συνέχεια επιλέξτε το παρακάτω button για το μαζικό upload: <button id='btnUpload'> Μαζικό Upolad pdf </button>
+</div> 
+
+<br/> 
+ <div class="${ styles.cytaSyndromites} ${styles.cytaSyndromitesResults}" id="pdfCheck" style="display:block">Αποτελέσματα της διαδικασίας μαζικού upload pdf...</div>
+
+ <hr/> 
+
+
   `;
 
 
@@ -97,7 +132,7 @@ export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExc
     const file = files[0]; 
     if (file) {
       csvCheck.innerHTML = 'Εκκινηση της διαδικασία δημιουργίας Document Sets από το csv ... Βρεθήκαν αρχεία για Εισαγωγή<br/>' ; 
-      CsvUtils.processCsv (file, csvCheck, SharepointUtils.createDocumentSets); 
+      CsvUtils.processCsv (file, csvCheck, 'lib1', SharepointUtils.createDocumentSets); 
      
       //SharepointUtils.createDocumentSets (rs) ; 
       }

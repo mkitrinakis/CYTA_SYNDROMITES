@@ -1,0 +1,60 @@
+<html>
+    <body>
+        <style>
+.cyta-syndromites {
+    
+    font-family:Arial, Helvetica, sans-serif;
+    
+    padding: 3rem;
+    border-width: 1px;
+    border: solid; 
+    border-color: gray ;
+    line-height: 1.8;
+    display: block;
+
+}
+
+.cyta-syndromites-results {
+    background-color: #006443;
+    color: #ddd;
+}
+
+.cyta-syndromites-alert {
+color: red ; 
+}
+        </style>
+
+<div class="cyta-syndromites">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν
+    <br/> 
+    <input type="file" id="documentSets_fileInput">
+    <hr/> 
+<br/> 
+
+ Και στη συνέχεια επιλέξτε το παρακάτω button για τη δημιουργία των Binders:  
+   <button id='btnCreate'> Δημιουργία Binders </button>
+
+  </div>
+  
+
+<br/> 
+  <div class="cyta-syndromites cyta-syndromites-results" id="csvCheck" style="display:block">Αποτελέσματα της διαδικασίας δημιουργίας Binders...</div>
+  
+  <hr/><br/><hr/><br/>
+
+<div class="cyta-syndromites ">  
+  Παρακάτω επιλέξτε το σύνολο των pdf που θέλετε να ανέβουν αυτοματοποιημένα στα ανάλογα folders. <span class="cyta-syndromites-alert">ΠΡΟΣΟΧΗ</span> δεν πρέπει να είναι μεγαλύτερα των 2MB
+<br/> 
+  <input type="file" id="pdfs_fileInput" multiple>
+<hr/> 
+<br/> 
+Και στη συνέχεια επιλέξτε το παρακάτω button για το μαζικό upload: <button id='btnUpload'> Μαζικό Upolad pdf </button>
+</div> 
+
+<br/> 
+ <div class="cyta-syndromites cyta-syndromites-results" id="pdfCheck" style="display:block">Αποτελέσματα της διαδικασίας μαζικού upload pdf...</div>
+
+ <hr/> 
+
+ 
+</body>
+</html>

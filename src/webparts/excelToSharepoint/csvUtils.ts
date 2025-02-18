@@ -12,7 +12,7 @@ export  type DocumentSetType = {
 
 export abstract class CsvUtils {
 
- public static processCsv(file: File, csvCheck:HTMLDivElement, callback: (rs : DocumentSetType[], csvCheck:HTMLDivElement) => Promise<void>) :void {
+ public static processCsv(file: File, csvCheck:HTMLDivElement, libraryName: string, callback: (rs : DocumentSetType[], csvCheck:HTMLDivElement, libraryName: string) => Promise<void>) :void {
   console.log ()
 let result: DocumentSetType[] = []; 
 //let finished : boolean = false ; 
@@ -35,7 +35,7 @@ console.log(columns[2]);
 let entry: DocumentSetType = { Title:columns[0], Description:columns[1] }; 
 result.push(entry);
      }
-     callback(result, csvCheck) ; 
+     callback(result, csvCheck, libraryName) ; 
      rs += '<table>' ; 
    //  finished = true; 
       
