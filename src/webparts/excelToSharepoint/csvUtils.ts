@@ -9,7 +9,7 @@ export  type DocumentSetType = {
   CustomerName: string; 
   StatusDocSet: string; 
   CustomerID1 : string; 
-  DateSent: Date; 
+  DateSent: Date | null; 
   Lawyer: string ; 
 }
 
@@ -35,7 +35,8 @@ let result: DocumentSetType[] = [];
         rs+= '</tr>' ;
 // console.log(columns[0]); 
 // console.log(columns[2]); 
-let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSent:new Date(),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
+let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSent: CsvUtils.getDate(columns[4].trim(), columns[1].trim()),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
+
 result.push(entry);
      }
      callback(result, csvCheck, libraryName) ; 
@@ -46,6 +47,20 @@ result.push(entry);
 
  fileReader.readAsText(file, 'utf-8' );
 }
+
+
+private static getDate(val : string, valid: string ) : Date | null {
+  try {
+val = val.split(' ')[0]; 
+let parts : string[] = val.split('/'); 
+return new Date(+parts[2], +parts[1] - 1, +parts[0]); 
+  }
+  catch (e) {
+     console.log ('Λάθος στην μετατροπή Ημερομηνίας για τον πελάτη: ' + valid);
+return null ; 
+  }
+}
+
 
 
 public static dumpResults(src : string[]) { 

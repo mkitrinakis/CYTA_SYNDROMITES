@@ -7,7 +7,17 @@ import {CsvUtils} from './csvUtils';
 //import {DocumentSetType} from './csvUtils'; 
 import {SharepointUtils} from './sharepointUtils'; 
 
-
+import {
+  PropertyPaneTextField,
+  PropertyPaneCheckbox,
+  PropertyPaneLabel,
+  PropertyPaneLink,
+  PropertyPaneSlider,
+  PropertyPaneToggle,
+  PropertyPaneDropdown,
+  IPropertyPaneConfiguration,
+  IPropertyPaneDropdownProps
+} from '@microsoft/sp-property-pane';
 
 import * as fs from 'fs'; 
 
@@ -15,37 +25,18 @@ import * as fs from 'fs';
 
 
 export interface IExcelToSharepointWebPartProps {
+  
 }
 
 export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExcelToSharepointWebPartProps> {
-  public render(): void {
-let old: string = `
-<div class="${ styles.cytaSyndromites }">Hello from Outer Space4...
-    <br/> 
-    <input type="file" id="documentSets_fileInput">
-  </div>
-  
-<hr/> 
-<br/> 
-<div>
-   <button id='btnCreate'> Test Button Create v0.22 </button>
-</div>
-<br/> 
-  <div class="${ styles.cytaSyndromites }" id="csvCheck" style="display:block">results of csv...</div>
-  
-  <hr/><br/><hr/><br/>
+  private conf : IPropertyPaneConfiguration; 
+  private ddr : IPropertyPaneDropdownProps; 
+private libraryName : string = 'lib1'; 
 
-<div>  
-  In the following section upload the files to be sent automatically to sharepoint 
-<br/> 
-  <input type="file" id="pdfs_fileInput" multiple>
-<hr/> 
-</div> 
-<div>
-   <button id='btnUpload'> Test Button Upload v0.29 </button>
-</div>
- <div class="${ styles.cytaSyndromites }" id="pdfCheck">results of pdf Upload...</div>
-`
+
+
+  public render(): void {
+
 
 
     this.domElement.innerHTML = `
@@ -61,7 +52,8 @@ let old: string = `
   
 
 <br/> 
-  <div class="${ styles.cytaSyndromites } "${ styles.cytaSyndromitesResults }" id="csvCheck">Αποτελέσματα της διαδικασίας δημιουργίας Binders...</div>
+  <div class="${ styles.cytaSyndromites } ${ styles.cytaSyndromitesResults }" id="csvCheck">Αποτελέσματα της διαδικασίας δημιουργίας Binders...</div>
+  
   
   <hr/><br/><hr/><br/>
 
@@ -132,7 +124,7 @@ let old: string = `
     const file = files[0]; 
     if (file) {
       csvCheck.innerHTML = 'Εκκινηση της διαδικασία δημιουργίας Document Sets από το csv ... Βρεθήκαν αρχεία για Εισαγωγή<br/>' ; 
-      CsvUtils.processCsv (file, csvCheck, 'lib1', SharepointUtils.createDocumentSets); 
+      CsvUtils.processCsv (file, csvCheck, this.libraryName, SharepointUtils.createDocumentSets); 
      
       //SharepointUtils.createDocumentSets (rs) ; 
       }
@@ -152,8 +144,10 @@ let old: string = `
         return;
     }
     let files :File[] = Array.from(fileInput.files);
-    SharepointUtils.processPDFs(files, pdfCheck); 
+    SharepointUtils.processPDFs(files, pdfCheck, this.libraryName); 
   }
+
+
   
 
  

@@ -18,7 +18,7 @@ export abstract class SharepointUtils {
 
 
 public static async createDocumentSets(documentSets: DocumentSetType[], csvCheck:HTMLDivElement, libraryName : string) {
-console.log ('createDocumentSets v 1.40 starting...'); 
+console.log ('createDocumentSets v 1.43 starting...'); 
 
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle(libraryName); 
@@ -46,7 +46,10 @@ let counter : number = 0;
              
             newListItem.set_item('Title', el.Title); 
             newListItem.set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', el.Lawyer); 
-            newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', new Date(2020,12,20)); 
+            if (el.DateSent != null) {
+               newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', el.DateSent); 
+            }
+            
             newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
             newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet);
             newListItem.set_item('CustomerName1', el.CustomerName); 
@@ -93,11 +96,11 @@ let counter : number = 0;
    
    ctx.executeQueryAsync(() => {
       console.log("Success"); 
-      csvCheck.innerHTML = csvCheck.innerHTML + el.Title + ' SUCCESS <br/>' ; } , 
+      csvCheck.innerHTML = csvCheck.innerHTML + el.Title + ' ΕΠΙΤΧΗΣ ΚΑΤΑΧΩΡΗΣΗ <br/>' ; } , 
       (e, args) => {
          console.log("Error" +  '-->' + args.get_message() + '/' + args.get_errorCode + '/' + args.get_errorDetails + '/' + args.get_errorValue + '-->' +  el.Title);
-         csvCheck.innerHTML = csvCheck.innerHTML + `<font color='red'>` +  el.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗ ΔΗΜΙΟΥΡΓΙΑ,  ΘΑ ΕΛΕΓΧΘΕΙ ΕΦΟΣΟΝ ΥΠΑΡΧΕΙ ΗΔΗ Ο ΦΑΚΕΛΟΣ ΝΑ ΓΙΝΕΙ UPDATE  </font><br/>` ; 
-      //   SharepointUtils.UpdateDocumentSet(el, csvCheck, libraryName)
+         csvCheck.innerHTML = csvCheck.innerHTML + `<font color='#ff9999'>` +  el.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗ ΔΗΜΙΟΥΡΓΙΑ,  ΘΑ ΕΛΕΓΧΘΕΙ ΕΦΟΣΟΝ ΥΠΑΡΧΕΙ ΗΔΗ Ο ΦΑΚΕΛΟΣ ΝΑ ΓΙΝΕΙ UPDATE  </font><br/>` ; 
+         SharepointUtils.UpdateDocumentSet(el, csvCheck, libraryName)
          
        });
 //       console.log ('next'); 
@@ -132,14 +135,21 @@ private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLD
          let ds : SP.DocumentSet.DocumentSet ; 
          //let subFolder: SP.Folder = web.get_folders().gfet(subFolderUrl); 
          ctx.load (subFolder);    
-         subFolder.get_listItemAllFields().set_item('DocumentSetDescription', 'A new description') ; 
+         subFolder.get_listItemAllFields().set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', toUpdate.Lawyer); 
+         if (toUpdate.DateSent != null) {
+            subFolder.get_listItemAllFields().set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', toUpdate.DateSent); 
+         }
+            subFolder.get_listItemAllFields().set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', toUpdate.CustomerID1); 
+            subFolder.get_listItemAllFields().set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', toUpdate.StatusDocSet);
+            subFolder.get_listItemAllFields().set_item('CustomerName1', toUpdate.CustomerName); 
+         //subFolder.get_listItemAllFields().set_item('DocumentSetDescription', 'A new description') ; 
          subFolder.get_listItemAllFields().update(); 
       ctx.executeQueryAsync(() => {
          console.log("Success"); 
          csvCheck.innerHTML = csvCheck.innerHTML + toUpdate.Title + ' ΕΠΙΤΥΧΗΣ ΕΝΗΜΕΡΩΣΗ <br/>' ; } , 
          (e, args) => {
             console.log("Error" + args.get_errorDetails() + '-->' + toUpdate.Title);
-            csvCheck.innerHTML = csvCheck.innerHTML + `<font color='red'>` +  toUpdate.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗΝ ΕΝΗΜΕΡΩΣΗ </font><br/>` ; 
+            csvCheck.innerHTML = csvCheck.innerHTML + `<font color='#ff9999'>` +  toUpdate.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗΝ ΕΝΗΜΕΡΩΣΗ </font><br/>` ; 
            
           });
           console.log ('next'); 
@@ -148,50 +158,19 @@ private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLD
 }
 
 
-// public static async createDocumentSet(folderName: string, description:string) {
-//    let ctx : SP.ClientContext = SP.ClientContext.get_current();
-//    //   const siteUrl : string = 'https://intrrusttest.sharepoint.com/sites/Markos1'; 
-//    // const ctx: SP.ClientContext = new SP.ClientContext(siteUrl);
-//    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle('lib1')
-//   // ctx.load(documentLibrary, "RootFolder") ; 
-//   ctx.load(documentLibrary) ; 
-//   await ctx.executeQueryAsync(); 
-//   let list1: SP.List = ctx.get_web().get_lists().getByTitle('list1'); 
-//   // ctx.load(documentLibrary, "RootFolder") ; 
-//   ctx.load(list1) ; 
-//   await ctx.executeQueryAsync(); 
-//    let rootFolder: SP.Folder = documentLibrary.get_rootFolder(); 
-//    ctx.load (rootFolder) ; 
-//    await ctx.executeQueryAsync(); 
-//    let  newItemInfo: SP.ListItemCreationInformation  = new SP.ListItemCreationInformation();
-//             newItemInfo.set_underlyingObjectType(SP.FileSystemObjectType.folder);
-//             newItemInfo.set_leafName(folderName);
-            
-    
-//              let newListItem: SP.ListItem = documentLibrary.addItem(newItemInfo);
-//              newListItem.set_item('ContentTypeId', '0x0120D520');
-//             newListItem.set_item('Title', folderName); 
-//             newListItem.set_item('DocumentSetDescription', description); 
-//             newListItem.set_item('HTML_x0020_File_x0020_Type', 'SharePoint.DocumentSet'); 
-//             newListItem.update(); 
-//    ctx.load(newListItem); 
-//    ctx.executeQueryAsync(() => {
-//       console.log("Success"); } , 
-//       (e) => {
-//          console.log("Error" + e);
-//        });
-// }
 
 
 
 
-public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement): Promise<void> {
+
+
+public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement, libraryName: string): Promise<void> {
   
     
    const clientContext = SP.ClientContext.get_current();
    const web = clientContext.get_web();
-   let lib1: SP.List = web.get_lists().getByTitle('lib1'); 
-   let rootFolder: SP.Folder = lib1.get_rootFolder(); 
+   let library: SP.List = web.get_lists().getByTitle(libraryName); 
+   let rootFolder: SP.Folder = library.get_rootFolder(); 
    // await clientContext.load(web); 
    // await clientContext.load (lib1); 
    
@@ -233,7 +212,7 @@ public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement): Promi
  
            // Upload file to SharePoint document library
            //const uploadFile = list.get_rootFolder().get_files().add(fileCreateInfo);
-           let  subFolderUrl : string = file.name.split('.')[0] ;
+           let  subFolderUrl : string = file.name.split('_')[0] ; // format must be XXXXXX_CC.pdf 
            subFolderUrl = basicPath + "/" + subFolderUrl ; 
            //subFolderUrl = basicPath; 
     // console.log (subFolderUrl) ; 
@@ -277,7 +256,7 @@ public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement): Promi
 // NOT USED 
 private  static checkFolderExists(folderNames: string[] )  {
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
-   let documentLibrary: SP.List = ctx.get_web().getList('lib1'); 
+   let documentLibrary: SP.List = ctx.get_web().getList('xxxxxx'); 
    let folders: SP.FolderCollection  ; 
 
 
@@ -304,67 +283,6 @@ ctx.executeQueryAsync(
 } 
 
 
-// private static async createDocumentSet_Old(folderName: string) {
-  
-//       const siteUrl : string = 'https://intrrusttest.sharepoint.com/sites/Markos1'; 
-//     const ctx: SP.ClientContext = new SP.ClientContext(siteUrl);
-//    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle('lib1')
-//   // ctx.load(documentLibrary, "RootFolder") ; 
-//   ctx.load(documentLibrary) ; 
-//   await ctx.executeQueryAsync(); 
-  
-//    let rootFolder: SP.Folder = documentLibrary.get_rootFolder(); 
-//    ctx.load (rootFolder) ; 
-//    await ctx.executeQueryAsync(); 
-//    let contentTypeID : string = "0x0120D52000683659260B26AF42AF65E57B09B613C2005AE31D539D0FB244BAEE6EA8CB1F4D52";
 
-//    contentTypeID = '0x0120D520007027D4D086859849A1A7A2D86118F15E'; 
-//    contentTypeID = '0x0120D520' ; 
-//   let contentType: SP.ContentType =  documentLibrary.get_contentTypes().getById(contentTypeID); 
-//   ctx.load (contentType) ; 
-
-//  SP.DocumentSet.DocumentSet.create (ctx, rootFolder, folderName, contentType.get_id() )
-//    ctx.executeQueryAsync(() => {
-//       console.log("Success"); } , 
-//       (e) => {
-//          console.log("Error" + e);
-//        });
-// }
-
-
-   //  private  createListItem() {
-   //      // You can optionally specify the Site URL here to get the context
-   //      // If you don't specify the URL, the method will get the context of the current site
-   //      // var clientContext = new SP.ClientContext("http://MyServer/sites/SiteCollection");
-   //      try {
-   //        const siteUrl : string = 'https://intrrusttest.sharepoint.com/sites/Markos1'; 
-   //        const clientContext: SP.ClientContext = new SP.ClientContext(siteUrl);
-     
-   //      var oWeb = clientContext.get_web();
-     
-   //      // Specify list title here
-   //      var oList = oWeb.get_lists().getByTitle("list1");
-     
-   //      // Get Item using CAML Query
-   //      //var camlQuery = new SP.CamlQuery();
-     
-   //      // New "ListItemCreationInformation" Object
-   //      var oListItemCreationInformation = new SP.ListItemCreationInformation();
-     
-   //      var oListItem = oList.addItem(oListItemCreationInformation);
-     
-   //      // Set value for each column here
-   //      oListItem.set_item('Title', 'New item value');
-   //   //   oListItem.set_item('Notes', 'This is dummy data');
-     
-   //      oListItem.update();
-     
-   //      clientContext.load(oListItem);
-     
-   //      // Execute the query to the server.
-   //      clientContext.executeQueryAsync(() => {console.log("Success"); } , (e) => {console.log("Error" + e); });
-   //      }
-   //      catch (e) { console.log (e); alert (e); }
-   //  }
 
 } 
