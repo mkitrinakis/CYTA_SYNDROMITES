@@ -6,8 +6,11 @@
 
 export  type DocumentSetType = {
   Title: string;
-  Description: string; 
-  
+  CustomerName: string; 
+  StatusDocSet: string; 
+  CustomerID1 : string; 
+  DateSent: Date; 
+  Lawyer: string ; 
 }
 
 export abstract class CsvUtils {
@@ -30,9 +33,9 @@ let result: DocumentSetType[] = [];
         const columns = rows[i].split(';');
         columns.forEach(c => rs+= '<td>' + c + '</td>') ; 
         rs+= '</tr>' ;
-console.log(columns[0]); 
-console.log(columns[2]); 
-let entry: DocumentSetType = { Title:columns[0], Description:columns[1] }; 
+// console.log(columns[0]); 
+// console.log(columns[2]); 
+let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSent:new Date(),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
 result.push(entry);
      }
      callback(result, csvCheck, libraryName) ; 

@@ -18,7 +18,7 @@ export abstract class SharepointUtils {
 
 
 public static async createDocumentSets(documentSets: DocumentSetType[], csvCheck:HTMLDivElement, libraryName : string) {
-console.log ('createDocumentSets v 1.5 starting...'); 
+console.log ('createDocumentSets v 1.40 starting...'); 
 
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle(libraryName); 
@@ -28,36 +28,85 @@ console.log ('createDocumentSets v 1.5 starting...');
    let rootFolder: SP.Folder = documentLibrary.get_rootFolder(); 
    ctx.load (rootFolder) ; 
    await ctx.executeQueryAsync(); 
-
+let counter : number = 0; 
    await   documentSets.forEach((el :DocumentSetType) => {
-      console.log('start'); 
+      counter ++; 
+    //  console.log('start'); 
  let  newItemInfo: SP.ListItemCreationInformation  = new SP.ListItemCreationInformation();
             newItemInfo.set_underlyingObjectType(SP.FileSystemObjectType.folder);
             newItemInfo.set_leafName(el.Title);
              let newListItem: SP.ListItem = documentLibrary.addItem(newItemInfo);
              newListItem.set_item('ContentTypeId', '0x0120D520');
+
+          //   newListItem.set_item('ContentTypeId', '0x0120D520006525B4AA47A921449105A9DE7F02C441');  // Φακελοσ Πελάτη
+             // Δεν παίζει κανένα extra πεδίο, Ελληνικά 
+             // // Δεν παίζει κανένα extra πεδίο,  Αγγλικά. 
+             //newListItem.set_item('ContentTypeId', '0x0120D520006525B4AA47A921449105A9DE7F02C441000E4C7525565E314A9EBA3D655E3208B2'); // Φακελος Πελάτη List CT 
+             
+             
             newListItem.set_item('Title', el.Title); 
-            newListItem.set_item('DocumentSetDescription', el.Description); 
-            newListItem.set_item('HTML_x0020_File_x0020_Type', 'SharePoint.DocumentSet'); 
+            newListItem.set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', el.Lawyer); 
+            newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', new Date(2020,12,20)); 
+            newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
+            newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet);
+            newListItem.set_item('CustomerName1', el.CustomerName); 
+         //   newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); 
+         //   newListItem.set_item('Δικηγόρος', el.Lawyer); 
+            
+            
+            
+
+            // if ((counter % 4) ==0) {
+            //    console.log ('0-' + el.Title) ; 
+            
+            //    newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', new Date(2020,12,20)); 
+          
+            // }
+            // if ((counter % 4) ==1) {
+            //    console.log ('1-'+ el.Title) ; 
+            // //newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); \
+            // newListItem.set_item('CustomerName1', el.CustomerName); 
+               
+            // }
+            // if ((counter % 4) ==2) {
+            //    console.log ('2-'+ el.Title) ; 
+            //    newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
+            
+            // }
+            // if ((counter % 4) ==3) {
+            //    newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet); 
+            //    console.log ('3-'+ el.Title) ; 
+            // }
+
+
+            //newListItem.set_item('HTML_x0020_File_x0020_Type', 'SharePoint.DocumentSet'); 
+            
+            //newListItem.set_item('CustomerID1', el.CustomerID1); 
+         //   
+            //newListItem.set_item('StatusDocSet', el.StatusDocSet); 
+            
+          //  newListItem.set_item('DateSent', el.DateSent); 
+          //  newListItem.set_item('Δικηγόρος', el.Lawyer); 
+            
             newListItem.update(); 
    ctx.load(newListItem); 
    
    ctx.executeQueryAsync(() => {
       console.log("Success"); 
       csvCheck.innerHTML = csvCheck.innerHTML + el.Title + ' SUCCESS <br/>' ; } , 
-      (e) => {
-         console.log("Error" + e + '-->' + el.Title);
+      (e, args) => {
+         console.log("Error" +  '-->' + args.get_message() + '/' + args.get_errorCode + '/' + args.get_errorDetails + '/' + args.get_errorValue + '-->' +  el.Title);
          csvCheck.innerHTML = csvCheck.innerHTML + `<font color='red'>` +  el.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗ ΔΗΜΙΟΥΡΓΙΑ,  ΘΑ ΕΛΕΓΧΘΕΙ ΕΦΟΣΟΝ ΥΠΑΡΧΕΙ ΗΔΗ Ο ΦΑΚΕΛΟΣ ΝΑ ΓΙΝΕΙ UPDATE  </font><br/>` ; 
-         SharepointUtils.UpdateDocumentSet(el, csvCheck, libraryName)
+      //   SharepointUtils.UpdateDocumentSet(el, csvCheck, libraryName)
          
        });
-       console.log ('next'); 
+//       console.log ('next'); 
    });
    
 }
 
 private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLDivElement, libraryName : string) {
-   console.log ('UpdateDocumentSets v 1.0.5 starting...'); 
+   console.log ('UpdateDocumentSets v 1.0.7 starting...'); 
       let ctx : SP.ClientContext = SP.ClientContext.get_current();
       let web : SP.Web  = ctx.get_web(); 
       ctx.load (web); 
@@ -88,8 +137,8 @@ private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLD
       ctx.executeQueryAsync(() => {
          console.log("Success"); 
          csvCheck.innerHTML = csvCheck.innerHTML + toUpdate.Title + ' ΕΠΙΤΥΧΗΣ ΕΝΗΜΕΡΩΣΗ <br/>' ; } , 
-         (e) => {
-            console.log("Error" + e + '-->' + toUpdate.Title);
+         (e, args) => {
+            console.log("Error" + args.get_errorDetails() + '-->' + toUpdate.Title);
             csvCheck.innerHTML = csvCheck.innerHTML + `<font color='red'>` +  toUpdate.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗΝ ΕΝΗΜΕΡΩΣΗ </font><br/>` ; 
            
           });

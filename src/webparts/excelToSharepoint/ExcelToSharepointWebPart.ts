@@ -49,7 +49,7 @@ let old: string = `
 
 
     this.domElement.innerHTML = `
-<div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν
+<div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν v.1,1
     <br/> 
     <input type="file" id="documentSets_fileInput">
     <hr/> 
