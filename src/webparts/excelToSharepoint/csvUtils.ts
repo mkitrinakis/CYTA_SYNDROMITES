@@ -9,7 +9,7 @@ export  type DocumentSetType = {
   CustomerName: string; 
   StatusDocSet: string; 
   CustomerID1 : string; 
-  DateSent: Date | null; 
+  DateSend: Date | null; 
   Lawyer: string ; 
 }
 
@@ -35,7 +35,7 @@ let result: DocumentSetType[] = [];
         rs+= '</tr>' ;
 // console.log(columns[0]); 
 // console.log(columns[2]); 
-let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSent: CsvUtils.getDate(columns[4].trim(), columns[1].trim()),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
+let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSend: CsvUtils.getDate(columns[4].trim(), columns[1].trim()),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
 
 result.push(entry);
      }

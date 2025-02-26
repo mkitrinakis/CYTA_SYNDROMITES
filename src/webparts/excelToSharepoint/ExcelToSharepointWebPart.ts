@@ -31,7 +31,7 @@ export interface IExcelToSharepointWebPartProps {
 export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExcelToSharepointWebPartProps> {
   private conf : IPropertyPaneConfiguration; 
   private ddr : IPropertyPaneDropdownProps; 
-private libraryName : string = 'lib1'; 
+private libraryName : string = 'Συνδρομητές'; 
 
 
 
@@ -40,7 +40,7 @@ private libraryName : string = 'lib1';
 
 
     this.domElement.innerHTML = `
-<div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν v.1,1
+<div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν
     <br/> 
     <input type="file" id="documentSets_fileInput">
     <hr/> 
@@ -115,7 +115,6 @@ private libraryName : string = 'lib1';
 
 
   private createDocumentSets(): void {
-    console.log('Hi test v0.5.') ; 
     
     let files : FileList | null = (document.getElementById('documentSets_fileInput') as HTMLInputElement)?.files ; 
     let csvCheck: HTMLDivElement  = (document.getElementById('csvCheck') as HTMLDivElement); 

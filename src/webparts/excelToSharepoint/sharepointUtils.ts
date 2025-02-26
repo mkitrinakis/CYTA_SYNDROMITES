@@ -18,7 +18,7 @@ export abstract class SharepointUtils {
 
 
 public static async createDocumentSets(documentSets: DocumentSetType[], csvCheck:HTMLDivElement, libraryName : string) {
-console.log ('createDocumentSets v 1.43 starting...'); 
+console.log ('createDocumentSets v 10.0 starting...'); 
 
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle(libraryName); 
@@ -45,14 +45,19 @@ let counter : number = 0;
              
              
             newListItem.set_item('Title', el.Title); 
-            newListItem.set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', el.Lawyer); 
-            if (el.DateSent != null) {
-               newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', el.DateSent); 
+            //newListItem.set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', el.Lawyer); 
+            newListItem.set_item('Lawyer', el.Lawyer); 
+            if (el.DateSend != null) {
+               //newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', el.DateSent); 
+               newListItem.set_item('DateSend', el.DateSend); 
             }
             
-            newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
-            newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet);
-            newListItem.set_item('CustomerName1', el.CustomerName); 
+            //newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
+            newListItem.set_item('CustomerID1', el.CustomerID1); 
+            //newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet);
+            newListItem.set_item('StatusDocSet', el.StatusDocSet);
+            //newListItem.set_item('CustomerName1', el.CustomerName); 
+            newListItem.set_item('CustomerName', el.CustomerName); 
          //   newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); 
          //   newListItem.set_item('Δικηγόρος', el.Lawyer); 
             
@@ -70,7 +75,7 @@ let counter : number = 0;
             // //newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); \
             // newListItem.set_item('CustomerName1', el.CustomerName); 
                
-            // }
+            // }   
             // if ((counter % 4) ==2) {
             //    console.log ('2-'+ el.Title) ; 
             //    newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
@@ -127,7 +132,7 @@ private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLD
    catch (e)  { 
       let msg: string = e.get_message(); 
       console.log (msg) ; 
-      alert('ΠΡΟΒΛΗΜΑ , Δεν έγινε καμμία ενέργεια, Παρακαλώ προσπαθήστε εκ νέου ==> ' + msg); 
+      alert('ΠΡΟΒΛΗΜΑ , Δεν έγινε καμμία ενέργεια, Παρακαλώ προσπαθήστε εκ νέου ==> ' + msg);   
    }
       
          let subFolderUrl : string  = basicPath + "/" + toUpdate.Title ; 
@@ -135,14 +140,19 @@ private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLD
          let ds : SP.DocumentSet.DocumentSet ; 
          //let subFolder: SP.Folder = web.get_folders().gfet(subFolderUrl); 
          ctx.load (subFolder);    
-         subFolder.get_listItemAllFields().set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', toUpdate.Lawyer); 
-         if (toUpdate.DateSent != null) {
-            subFolder.get_listItemAllFields().set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', toUpdate.DateSent); 
+         //subFolder.get_listItemAllFields().set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', toUpdate.Lawyer); 
+         subFolder.get_listItemAllFields().set_item('Lawyer', toUpdate.Lawyer); 
+         if (toUpdate.DateSend != null) {
+            //subFolder.get_listItemAllFields().set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', toUpdate.DateSent); 
+            subFolder.get_listItemAllFields().set_item('DateSend', toUpdate.DateSend); 
          }
-            subFolder.get_listItemAllFields().set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', toUpdate.CustomerID1); 
-            subFolder.get_listItemAllFields().set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', toUpdate.StatusDocSet);
-            subFolder.get_listItemAllFields().set_item('CustomerName1', toUpdate.CustomerName); 
-         //subFolder.get_listItemAllFields().set_item('DocumentSetDescription', 'A new description') ; 
+//            subFolder.get_listItemAllFields().set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', toUpdate.CustomerID1); 
+         subFolder.get_listItemAllFields().set_item('CustomerID1', toUpdate.CustomerID1); 
+            //subFolder.get_listItemAllFields().set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', toUpdate.StatusDocSet);
+            subFolder.get_listItemAllFields().set_item('StatusDocSet', toUpdate.StatusDocSet);
+            //subFolder.get_listItemAllFields().set_item('CustomerName1', toUpdate.CustomerName); 
+            subFolder.get_listItemAllFields().set_item('CustomerName', toUpdate.CustomerName); 
+         
          subFolder.get_listItemAllFields().update(); 
       ctx.executeQueryAsync(() => {
          console.log("Success"); 
@@ -170,6 +180,7 @@ public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement, librar
    const clientContext = SP.ClientContext.get_current();
    const web = clientContext.get_web();
    let library: SP.List = web.get_lists().getByTitle(libraryName); 
+  //let library: SP.List = web.getList()
    let rootFolder: SP.Folder = library.get_rootFolder(); 
    // await clientContext.load(web); 
    // await clientContext.load (lib1); 
