@@ -1,11 +1,12 @@
 import { Version } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp-webpart-base';
 
 
 import styles from './ExcelToSharepointWebPart.module.scss';
 import {CsvUtils} from './csvUtils'; 
 //import {DocumentSetType} from './csvUtils'; 
 import {SharepointUtils} from './sharepointUtils'; 
+import {Parameters} from './parameters'; 
 
 import {
   PropertyPaneTextField,
@@ -25,20 +26,48 @@ import * as fs from 'fs';
 
 
 export interface IExcelToSharepointWebPartProps {
-  
+//   baseUrl : string; 
+//   libraryName : string; 
 }
 
 export default class ExcelToSharepointWebPart extends BaseClientSideWebPart<IExcelToSharepointWebPartProps> {
-  private conf : IPropertyPaneConfiguration; 
-  private ddr : IPropertyPaneDropdownProps; 
-private libraryName : string = 'Συνδρομητές'; 
+  
+  // protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  //   return {
+  //     pages: [
+  //       {
+  //         header: {
+  //           description: Strings.PropertyPaneDescription
+  //         },
+  //         groups: [
+  //           {
+  //             groupName: Strings.BasicGroupName,
+  //             groupFields: [
+  //             PropertyPaneTextField('baseUrl', {
+  //               label: 'baseUrl'
+  //             }),
+  //             PropertyPaneTextField('libraryName', {
+  //               label: 'libraryName'
+  //             }),
+  //           ]
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   };
+  // }
+  
+
+//
+
+private libraryName : string =  Parameters.getLibraryName(); 
 
 
 
   public render(): void {
-
-
-
+let errorHandling = '' ; 
+try {
+  errorHandling = 'while rendering' ; 
     this.domElement.innerHTML = `
 <div class="${ styles.cytaSyndromites }">Παρακαλώ επιλέξτε το csv με τις πληροφορίες για τα Binders που θα δημιουργηθούν
     <br/> 
@@ -65,20 +94,32 @@ private libraryName : string = 'Συνδρομητές';
 <br/> 
 Και στη συνέχεια επιλέξτε το παρακάτω button για το μαζικό upload: <button id='btnUpload'> Μαζικό Upolad pdf </button>
 </div> 
-
 <br/> 
  <div class="${ styles.cytaSyndromites} ${styles.cytaSyndromitesResults}" id="pdfCheck" style="display:block">Αποτελέσματα της διαδικασίας μαζικού upload pdf...</div>
-
  <hr/> 
-
 
   `;
 
 
 
     //SharepointUtils.createListItem(); 
+    errorHandling = 'while setting buttonEventHandler' ; 
     this.setButtonEventHandlers(); 
+}
+catch (e : unknown) { 
+    let msg : string  = 'N/A'; 
+    if (typeof e === "string") {
+      msg = e.toUpperCase() // works, `e` narrowed to string
+  } else if (e instanceof Error) {
+      msg = e.message // works, `e` narrowed to Error
   }
+  msg = 'System error:' + msg ; 
+console.log (msg); 
+alert (msg) ; 
+
+  }
+}
+  
 
 
 

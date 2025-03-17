@@ -15,37 +15,44 @@ export  type DocumentSetType = {
 
 export abstract class CsvUtils {
 
+  
  public static processCsv(file: File, csvCheck:HTMLDivElement, libraryName: string, callback: (rs : DocumentSetType[], csvCheck:HTMLDivElement, libraryName: string) => Promise<void>) :void {
-  console.log ()
 let result: DocumentSetType[] = []; 
 //let finished : boolean = false ; 
   const fileReader = new FileReader();
  //let rs:string = 'to process!'; 
   fileReader.onload = () => {
+try {
      const fileContent = fileReader.result as string;
-     const rows = fileContent.split(/\r\n|\r|\n/);
-     
-
-     
+     const rows = fileContent.split(/\r\n|\r|\n/); 
       let rs:string = '<table>' ; 
      for (let i = 0; i < rows.length; i++) {
       rs+= '<tr>' ;
         const columns = rows[i].split(';');
         columns.forEach(c => rs+= '<td>' + c + '</td>') ; 
         rs+= '</tr>' ;
-// console.log(columns[0]); 
-// console.log(columns[2]); 
 let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSend: CsvUtils.getDate(columns[4].trim(), columns[1].trim()),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
-
 result.push(entry);
      }
      callback(result, csvCheck, libraryName) ; 
      rs += '<table>' ; 
    //  finished = true; 
-      
+    }
+    catch (e : unknown) { 
+      let msg : string  = 'N/A'; 
+      if (typeof e === "string") {
+        msg = e.toUpperCase() // works, `e` narrowed to string
+    } else if (e instanceof Error) {
+        msg = e.message // works, `e` narrowed to Error
+    }
+    msg = 'Πρόβλημα κατά τη φόρτωση csv αρχείου, πιθανόν να είναι σε λάθος format:' + msg ; 
+  console.log (msg); 
+  alert (msg) ; 
+    } 
   };
 
  fileReader.readAsText(file, 'utf-8' );
+
 }
 
 

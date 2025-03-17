@@ -4,7 +4,11 @@ require('sp-runtime');
 require('sharepoint');
 
 import {DocumentSetType} from './csvUtils'; 
+import {Parameters} from './parameters'; 
 import * as fs from 'fs'; 
+
+
+
 
 //Sites/PowerApps-Devs/Tests 
 export abstract class SharepointUtils {
@@ -15,6 +19,7 @@ export abstract class SharepointUtils {
 //https://community.dynamics.com/blogs/post/?postid=f14b2517-2c9d-404a-8a37-e76846069f74
 
 
+private static libraryPath : string =  Parameters.getLibraryUrl(); 
 
 
 public static async createDocumentSets(documentSets: DocumentSetType[], csvCheck:HTMLDivElement, libraryName : string) {
@@ -23,11 +28,7 @@ console.log ('createDocumentSets v 10.0 starting...');
    let ctx : SP.ClientContext = SP.ClientContext.get_current();
    let documentLibrary: SP.List = ctx.get_web().get_lists().getByTitle(libraryName); 
    ctx.load(documentLibrary) ; 
-   
    await ctx.executeQueryAsync();
-   let rootFolder: SP.Folder = documentLibrary.get_rootFolder(); 
-   ctx.load (rootFolder) ; 
-   await ctx.executeQueryAsync(); 
 let counter : number = 0; 
    await   documentSets.forEach((el :DocumentSetType) => {
       counter ++; 
@@ -41,9 +42,7 @@ let counter : number = 0;
           //   newListItem.set_item('ContentTypeId', '0x0120D520006525B4AA47A921449105A9DE7F02C441');  // Φακελοσ Πελάτη
              // Δεν παίζει κανένα extra πεδίο, Ελληνικά 
              // // Δεν παίζει κανένα extra πεδίο,  Αγγλικά. 
-             //newListItem.set_item('ContentTypeId', '0x0120D520006525B4AA47A921449105A9DE7F02C441000E4C7525565E314A9EBA3D655E3208B2'); // Φακελος Πελάτη List CT 
-             
-             
+             //newListItem.set_item('ContentTypeId', '0x0120D520006525B4AA47A921449105A9DE7F02C441000E4C7525565E314A9EBA3D655E3208B2'); // Φακελος Πελάτη List CT     
             newListItem.set_item('Title', el.Title); 
             //newListItem.set_item('_x0394__x03b9__x03ba__x03b7__x03b3__x03cc__x03c1__x03bf__x03c2_', el.Lawyer); 
             newListItem.set_item('Lawyer', el.Lawyer); 
@@ -58,44 +57,7 @@ let counter : number = 0;
             newListItem.set_item('StatusDocSet', el.StatusDocSet);
             //newListItem.set_item('CustomerName1', el.CustomerName); 
             newListItem.set_item('CustomerName', el.CustomerName); 
-         //   newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); 
-         //   newListItem.set_item('Δικηγόρος', el.Lawyer); 
-            
-            
-            
-
-            // if ((counter % 4) ==0) {
-            //    console.log ('0-' + el.Title) ; 
-            
-            //    newListItem.set_item('_x0397__x03bc__x03b5__x03c1__x002e__x0020__x0391__x03c0__x03bf__x03c3__x03c4__x03bf__x03bb__x03ae__x03c2_', new Date(2020,12,20)); 
-          
-            // }
-            // if ((counter % 4) ==1) {
-            //    console.log ('1-'+ el.Title) ; 
-            // //newListItem.set_item('Ονοματεπώνυμο Πελάτη', el.CustomerName); \
-            // newListItem.set_item('CustomerName1', el.CustomerName); 
-               
-            // }   
-            // if ((counter % 4) ==2) {
-            //    console.log ('2-'+ el.Title) ; 
-            //    newListItem.set_item('_x0391__x0394__x03a4__x002f__x0391__x03c1__x002e__x0020__x0395__x03b3__x03b3__x03c1__x03b1__x03c6__x03ae__x03c2_', el.CustomerID1); 
-            
-            // }
-            // if ((counter % 4) ==3) {
-            //    newListItem.set_item('_x039a__x03b1__x03c4__x03ac__x03c3__x03c4__x03b1__x03c3__x03b7__x0020__x03a6__x03b1__x03ba__x03ad__x03bb__x03bf__x03c5_', el.StatusDocSet); 
-            //    console.log ('3-'+ el.Title) ; 
-            // }
-
-
-            //newListItem.set_item('HTML_x0020_File_x0020_Type', 'SharePoint.DocumentSet'); 
-            
-            //newListItem.set_item('CustomerID1', el.CustomerID1); 
-         //   
-            //newListItem.set_item('StatusDocSet', el.StatusDocSet); 
-            
-          //  newListItem.set_item('DateSent', el.DateSent); 
-          //  newListItem.set_item('Δικηγόρος', el.Lawyer); 
-            
+         
             newListItem.update(); 
    ctx.load(newListItem); 
    
@@ -103,7 +65,7 @@ let counter : number = 0;
       console.log("Success"); 
       csvCheck.innerHTML = csvCheck.innerHTML + el.Title + ' ΕΠΙΤΧΗΣ ΚΑΤΑΧΩΡΗΣΗ <br/>' ; } , 
       (e, args) => {
-         console.log("Error" +  '-->' + args.get_message() + '/' + args.get_errorCode + '/' + args.get_errorDetails + '/' + args.get_errorValue + '-->' +  el.Title);
+         console.log("Error" +  '-->' + args.get_message() +  '-->' +  el.Title);
          csvCheck.innerHTML = csvCheck.innerHTML + `<font color='#ff9999'>` +  el.Title + ` ΠΡΟΒΛΗΜΑ ΣΤΗ ΔΗΜΙΟΥΡΓΙΑ,  ΘΑ ΕΛΕΓΧΘΕΙ ΕΦΟΣΟΝ ΥΠΑΡΧΕΙ ΗΔΗ Ο ΦΑΚΕΛΟΣ ΝΑ ΓΙΝΕΙ UPDATE  </font><br/>` ; 
          SharepointUtils.UpdateDocumentSet(el, csvCheck, libraryName)
          
@@ -114,28 +76,22 @@ let counter : number = 0;
 }
 
 private static async UpdateDocumentSet(toUpdate: DocumentSetType, csvCheck:HTMLDivElement, libraryName : string) {
-   console.log ('UpdateDocumentSets v 1.0.7 starting...'); 
+   console.log ('UpdateDocumentSets v 1.0.8 starting...'); 
       let ctx : SP.ClientContext = SP.ClientContext.get_current();
       let web : SP.Web  = ctx.get_web(); 
       ctx.load (web); 
+      await ctx.executeQueryAsync(); 
       let documentLibrary: SP.List = web.get_lists().getByTitle(libraryName); 
       ctx.load(documentLibrary) ; 
-      let rootFolder : SP.Folder = documentLibrary.get_rootFolder(); 
-      await ctx.load (rootFolder, 'ServerRelativeUrl'); 
-   let basicPath : string = '' ; 
-   await ctx.executeQueryAsync(); 
-   basicPath  = rootFolder.get_serverRelativeUrl(); 
-   await ctx.executeQueryAsync(); 
-   try {
-      console.log (`basicpath:` + basicPath); 
-   }
-   catch (e)  { 
-      let msg: string = e.get_message(); 
-      console.log (msg) ; 
-      alert('ΠΡΟΒΛΗΜΑ , Δεν έγινε καμμία ενέργεια, Παρακαλώ προσπαθήστε εκ νέου ==> ' + msg);   
-   }
-      
-         let subFolderUrl : string  = basicPath + "/" + toUpdate.Title ; 
+      await ctx.executeQueryAsync(); 
+   //    let rootFolder : SP.Folder = documentLibrary.get_rootFolder(); 
+   //    ctx.load (rootFolder); 
+   // await ctx.executeQueryAsync(); 
+   //let basicPath : string = '' ; 
+   //basicPath  = rootFolder.get_serverRelativeUrl(); 
+   
+         let subFolderUrl : string  = this.libraryPath + "/" + toUpdate.Title ; 
+         console.log ('subfolderUrl:' + subFolderUrl); 
          let subFolder: SP.Folder  = web.getFolderByServerRelativeUrl (subFolderUrl) ;
          let ds : SP.DocumentSet.DocumentSet ; 
          //let subFolder: SP.Folder = web.get_folders().gfet(subFolderUrl); 
@@ -179,28 +135,26 @@ public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement, librar
     
    const clientContext = SP.ClientContext.get_current();
    const web = clientContext.get_web();
+   clientContext.load(web) ; 
+   await clientContext.executeQueryAsync(); 
    let library: SP.List = web.get_lists().getByTitle(libraryName); 
+   clientContext.load(library); 
+   await clientContext.executeQueryAsync(); 
   //let library: SP.List = web.getList()
    let rootFolder: SP.Folder = library.get_rootFolder(); 
    // await clientContext.load(web); 
    // await clientContext.load (lib1); 
    
-   await clientContext.load (rootFolder, 'ServerRelativeUrl'); 
-   let basicPath : string = '' ; 
+    //clientContext.load (rootFolder, 'ServerRelativeUrl'); 
+    clientContext.load (rootFolder); 
+   
     //clientContext.executeQueryAsync(() => { basicPath  = rootFolder.get_serverRelativeUrl(); console.log (`bp:` + basicPath);  uploadFileSequentially(0);}  );
    await clientContext.executeQueryAsync(); 
-   basicPath  = rootFolder.get_serverRelativeUrl(); 
-   try {
-      console.log (`basicpath:` + basicPath); 
-   }
-   catch (e)  { 
-      let msg: string = e.get_message(); 
-      console.log (msg) ; 
-      alert('ΠΡΟΒΛΗΜΑ , Δεν έγινε καμμία ενέργεια, Παρακαλώ προσπαθήστε εκ νέου ==> ' + msg); 
-   }
+   
+   
 
     uploadFileSequentially(0);
-       
+       let libraryPath = Parameters.getLibraryUrl(); 
    function uploadFileSequentially(index: number): void {
        if (index >= files.length) {
            console.log("Finished Uploading.");
@@ -224,7 +178,8 @@ public static async  processPDFs(files : File[], pdfCheck:HTMLDivElement, librar
            // Upload file to SharePoint document library
            //const uploadFile = list.get_rootFolder().get_files().add(fileCreateInfo);
            let  subFolderUrl : string = file.name.split('_')[0] ; // format must be XXXXXX_CC.pdf 
-           subFolderUrl = basicPath + "/" + subFolderUrl ; 
+           subFolderUrl = libraryPath + "/" + subFolderUrl ; 
+           console.log ('sunFolderUrl:' + subFolderUrl); 
            //subFolderUrl = basicPath; 
     // console.log (subFolderUrl) ; 
            //list.get_rootFolder().get_folders().getByUrl (subFolderUrl); 
