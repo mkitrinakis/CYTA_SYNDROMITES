@@ -27,12 +27,15 @@ try {
      const rows = fileContent.split(/\r\n|\r|\n/); 
       let rs:string = '<table>' ; 
      for (let i = 0; i < rows.length; i++) {
+      if (!(rows[i].trim() === '')) {
+        //alert(rows[i]); 
       rs+= '<tr>' ;
         const columns = rows[i].split(';');
         columns.forEach(c => rs+= '<td>' + c + '</td>') ; 
         rs+= '</tr>' ;
 let entry: DocumentSetType = { Title:columns[0].trim(), CustomerName:columns[1].trim(), StatusDocSet: columns[2].trim(), DateSend: CsvUtils.getDate(columns[4].trim(), columns[1].trim()),  CustomerID1 :  columns[3].trim(), Lawyer : columns[5].trim() }; 
 result.push(entry);
+      }
      }
      callback(result, csvCheck, libraryName) ; 
      rs += '<table>' ; 

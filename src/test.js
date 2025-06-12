@@ -215,6 +215,7 @@ var programList1GUID = '{d738f396-ba83-4002-83c8-676a7b415068}';
     var final_dose = 0; 
     var acceptance_status = false; 
     var globalsegment = ""; 
+    var globalcategory = "" ; 
     var globaloption = ""; 
     var globaltool = "CC";
     var dosi_poso_acceptance = false;
@@ -310,14 +311,16 @@ ExecuteOrDelayUntilScriptLoaded(initializeCalculator, "sp.js");
         ExtentionPaymentListActions.push({category:"Κινητή",coded_category:"Κινητή",third_panel_existance:true,action:"<b>Siebel κινητής συμπληρώνω SR (σε επίπεδο μητρώου) :</b><br><br>Type: Θέματα Εισπράξεων<br>Category: Διακανονισμός Οφειλής<br>Subcategory: Συμφωνημένος Διακανονισμός<br>Στο Dynamic Applet 'Θέματα Εισπράξεων' συμπληρώνω τις τιμές στο πεδίο Στοιχεία Διακανονισμού:<br>Τύπο διακανονισμού: (επιλέγω αναλόγως)<br>Ποσό διακανονισμού: (Το ποσό που είναι προς παράταση)<br>Ημερομηνία έκδοσης λογαριασμού: (Την ημ/νία έκδοσης του λογαριασμού)<br>Ημερομηνία πληρωμής διακαν.ποσού: (Την ημερομηνία που επιθυμεί να εξοφλήσει ο συνδρομητής)<br>Στο πεδίο Contact Details αλλάζω το status στο Auto SMS Upon Creation σε FCR<br>Ctrl +S και Auto Assign και στη συνέχεια αλλάζω το status σε Closed<br>Αν έχει ενεργή φραγή συμπληρώνω Order 'Bar/Unbar' για απενεργοποίηση της.<br><br><b>Siebel σταθερής συμπληρώνω SR:</b><br><br>Περιοχή: Λογαριασμοί & Χρεώσεις<br>Υπο-περιοχή: Διακανονισμός<br>Αποτέλεσμα κλήσης: Εκρεμμεί έλεγχος / Ενημέρωση<br>και αναγράφω τις λεπτομέριες του διακανονισμού<br><br><b>Δεν ξεχνώ:</b><br><br>Η παράταση εξόφλησης θα αφορά το σύνολο των ληξιπρόθεσμων οφειλών και θα υπολογίζεται με βάση την ημερομηνία του παλαιότερου λογαριασμού<br>Η παράταση θα πρέπει να δίνεται σύμφωνα με το αίτημα και τις ανάγκες του συνδρομητή και σε καμία περίπτωση να μην δίνεται απευθείας το μέγιστό των ημερών<br>Σε περιπτώσεις όπου το ποσό πληρωμής υπερβαίνει τα 500€ ενημερώνω τον συνδρομητή ότι η πληρωμή δεν μπορεί να γίνει με μετρητά<br>Στην περίπτωση συνδρομητών με Δόσεις Συσκευής στο λογαριασμό ενημερώνουμε ότι δεν είναι εφικτός διακανονισμός με δόσεις καθώς η οφειλή περιλαμβάνει ήδη δόσεις και προτείνουμε εναλλακτικά να κάνει πληρωμή με πιστωτική κάρτα και να βάλει τις δόσεις στην τράπεζα άτοκα",position:1});    
         ExtentionPaymentListActions.push({category:"Σταθερή",coded_category:"Σταθερή",third_panel_existance:true,action:"<b>Siebel κινητής συμπληρώνω SR (σε επίπεδο μητρώου) :</b><br><br>Type: Θέματα Εισπράξεων<br>Category: Διακανονισμός Οφειλής<br>Subcategory: Συμφωνημένος Διακανονισμός<br>Στο Dynamic Applet 'Θέματα Εισπράξεων' συμπληρώνω τις τιμές στο πεδίο Στοιχεία Διακανονισμού:<br>Τύπο διακανονισμού: (επιλέγω αναλόγως)<br>Ποσό διακανονισμού: (Το ποσό που είναι προς παράταση)<br>Ημερομηνία έκδοσης λογαριασμού: (Την ημ/νία έκδοσης του λογαριασμού)<br>Ημερομηνία πληρωμής διακαν.ποσού: (Την ημερομηνία που επιθυμεί να εξοφλήσει ο συνδρομητής)<br>Στο πεδίο Contact Details αλλάζω το status στο Auto SMS Upon Creation σε FCR<br>Ctrl +S και Auto Assign και στη συνέχεια αλλάζω το status σε Closed<br>Αν έχει ενεργή φραγή συμπληρώνω Order 'Bar/Unbar' για απενεργοποίηση της.<br><br><b>Siebel σταθερής συμπληρώνω SR:</b><br><br>Περιοχή: Λογαριασμοί & Χρεώσεις<br>Υπο-περιοχή: Διακανονισμός<br>Αποτέλεσμα κλήσης: Εκρεμμεί έλεγχος / Ενημέρωση<br>και αναγράφω τις λεπτομέριες του διακανονισμού<br><br><b>Δεν ξεχνώ:</b><br><br>Η παράταση εξόφλησης θα αφορά το σύνολο των ληξιπρόθεσμων οφειλών και θα υπολογίζεται με βάση την ημερομηνία του παλαιότερου λογαριασμού<br>Η παράταση θα πρέπει να δίνεται σύμφωνα με το αίτημα και τις ανάγκες του συνδρομητή και σε καμία περίπτωση να μην δίνεται απευθείας το μέγιστό των ημερών<br>Σε περιπτώσεις όπου το ποσό πληρωμής υπερβαίνει τα 500€ ενημερώνω τον συνδρομητή ότι η πληρωμή δεν μπορεί να γίνει με μετρητά<br>Στην περίπτωση συνδρομητών με Δόσεις Συσκευής στο λογαριασμό ενημερώνουμε ότι δεν είναι εφικτός διακανονισμός με δόσεις καθώς η οφειλή περιλαμβάνει ήδη δόσεις και προτείνουμε εναλλακτικά να κάνει πληρωμή με πιστωτική κάρτα και να βάλει τις δόσεις στην τράπεζα άτοκα",position:1});    
        
+	   
+	   var arrangementsMsg = '<b>(1)</b> Η διαδικασία <b>Διακανονισμού Δόσεων</b> ακολουθείται:<ul><li><b>ΜΟΝΟ εφόσον το ζητήσει ο ίδιος ο συνδρομητής</b></li><li>αν επικαλεστεί <b>αδυναμία εξόφλησης λόγω ανεργίας ή οικονομικής δυσχέρειας</b></li><br/><b>ΔΕΝ κάνουμε Διακανονισμό Δόσεων</b><br/><br/><br/><b>(2) Ποσό Διακανονισμού* -> </b> Συνολικό Οφειλόμενο Ποσό (Ληξιπρόθεσμο + τρέχον ποσό)<br/><br/><b>(3) Επιτρεπτός Αριθμός Δόσεων</b>Ο συνδρομητής μπορεί να πάρει <b> έως 5 ισόποσες μηνιαίες δόσεις, </b>  ανάλογα με το συνολικό ύψος της οφειλής του.<br/><table class="diakanonismos_actions"><tr><th class="diakanonismos_actions">Συνολικό οφειλόμενο ποσό λογαριασμού</th><th class="diakanonismos_actions">Ισόποσες Δόσεις</th></tr><tr class="diakanonismos_actions"><td>100-199€</td><td>2</td></tr><tr class="diakanonismos_actions"><td>200-499€</td><td>έως 3</td></tr><tr class="diakanonismos_actions"><td>500-699€</td><td>έως 4</td></tr><tr class="diakanonismos_actions"><td>700€+</td><td>έως 5</td></tr></table> ';
         ArrangementPaymentListChecks = []; //Recycle 
         // ArrangementPaymentListChecks.push({category:"Medium/Low",coded_category:"Medium_Low",third_panel_existance:true,check:"<b>Ελέγχω αν: </b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις λόγω ανεργίας μόνο 1 φορά (σε ετήσια βάση 01/01-31/12).",position:1}); 
         // ArrangementPaymentListChecks.push({category:"High Value",coded_category:"High_Value",third_panel_existance:true,check:"<b>Ελέγχω αν: </b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις λόγω ανεργίας μόνο 1 φορά (σε ετήσια βάση 01/01-31/12).",position:1});   
         // ArrangementPaymentListChecks.push({category:"Ultra High Value",coded_category:"Ultra_High_Value",third_panel_existance:true,check:"<b>Ελέγχω αν: </b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις λόγω ανεργίας μόνο 1 φορά (σε ετήσια βάση 01/01-31/12).",position:1});  
         // ArrangementPaymentListChecks.push({category:"SAM",coded_category:"SAM",third_panel_existance:true,check:"<b>Ελέγχω αν: </b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις λόγω ανεργίας μόνο 1 φορά (σε ετήσια βάση 01/01-31/12).<br>",position:1}); 
         // ArrangementPaymentListChecks.push({category:"SoHo",coded_category:"SoHo",third_panel_existance:true,check:"<b>Ελέγχω αν:</b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις 2 φορες (σε ετήσια βάση 01/01-31/12). Για να δοθεί ο δεύτερος διακανονισμός θα πρέπει απαραίτητα να έχει τηρηθεί ο πρώτος.  ",position:1}); 
-        ArrangementPaymentListChecks.push({category:"Κινητή",coded_category:"Κινητή",third_panel_existance:true,check:"<b>Ελέγχω αν:</b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις 2 φορες (σε ετήσια βάση 01/01-31/12). Για να δοθεί ο δεύτερος διακανονισμός θα πρέπει απαραίτητα να έχει τηρηθεί ο πρώτος.  ",position:1}); 
-        ArrangementPaymentListChecks.push({category:"Σταθερή",coded_category:"Κινητή",third_panel_existance:true,check:"<b>Ελέγχω αν:</b><br><br>Το μητρώο είναι ενεργό.<br>Ο συνδρομητής είναι χαρακτηρισμένος Bad Payer (βλ. Νο Segmentation/ Bad Payer)<br>Έχει ήδη ενεργή φραγή καθώς το λόγο για τον οποίο έχει ενεργοποιηθεί.<br>Ο συνδρομητής μπορεί να ζητήσει διακανονισμό με δόσεις 2 φορες (σε ετήσια βάση 01/01-31/12). Για να δοθεί ο δεύτερος διακανονισμός θα πρέπει απαραίτητα να έχει τηρηθεί ο πρώτος.  ",position:1});
+        ArrangementPaymentListChecks.push({category:"Κινητή",coded_category:"Κινητή",third_panel_existance:true,check:arrangementsMsg,position:1}); 
+        ArrangementPaymentListChecks.push({category:"Σταθερή",coded_category:"Κινητή",third_panel_existance:true,check:arrangementsMsg,position:1});
                 
         ArrangementPaymentListActions = []; //Recycle 
         // ArrangementPaymentListActions.push({category:"Medium/Low",coded_category:"Medium_Low",third_panel_existance:true,action:"<b>Siebel κινητής</b><br><br>1. Ενεργοποιώ φραγής, Περιαγωγής (BRR), Διεθνών Κλήσεων (BRI), Εξερχομένων κλήσεων προς αριθμούς υψηλής χρέωσης(BPRV).<br>2. Συμπληρώνω SR (σε επίπεδο μητρώου) : <br>Type: Θέματα Εισπράξεων<br>Category: Διακανονισμός Οφειλής<br>Subcategory: Διακανονισμός με Δόσεις<br>Comments: Άνεργος/Οικονομική δυσχέρεια και το λεκτικό από το πεδίο Λεκτικό SR του Εργαλείου Διακανονισμών<br>Στο Dynamic Applet 'Θέματα Εισπράξεων', στο πεδίο Στοιχεία Διακανονισμού συμπληρώνω την ημερομηνία πληρωμής της 1ης δόσης (μόνο)<br>Ctrl +S , Auto Assign και τέλος κάνω Closed το SR<br><strong>Σημείωση</strong><br>Επιλέγοντας Auto Assign εμφανίζεται popup μήνυμα που αναφέρει: <i>'Επιβεβαιώστε ότι το αίτημα έχει ολοκληρωθεί σε πρώτο χρόνο και επιλέξτε status Closed'</i>.<br>Το συγκεκριμένο μήνυμα θα πρέπει να αγνοείται σε περίπτωση καταχώρησης διακανονισμού σε δόσεις, πατώντας το ΟΚ. <br>3. Ενημερώνω το συνδρομητή πως μόλις εξοφλήσει την 1η δόση θα πρέπει να μας καλέσει εκ νέου. Αν πριν την καταβολή της 1ης  δόσης ο συνδρομητής είχε φραγή, μόλις την καταβάλει θα μπορεί να γίνει άρση της φραγής.<br><br><b>Siebel σταθερής:</b><br><br>1. Συμπληρώνω smartscript SR:<br>Περιοχή: Λογαριασμοί & Χρεώσεις <br>Υπο-περιοχή: Διακανονισμός με δόσεις<br>Αποτέλεσμα κλήσης: Εκκρεμεί έλεγχος / Ενημέρωση<br>Θέμα: Διακανονισμός με δόσεις για ανέργους και οικονομική δυσχέρεια<br>Λεπτομερής Περιγραφή: Κάνω Copy το λεκτικό του SR<br>Τμήμα: Credit Control <br>2. Ενημερώνω το συνδρομητή πως μόλις εξοφλήσει την 1η δόση θα πρέπει να μας καλέσει εκ νέου. Αν πριν την καταβολή της 1ης  δόσης ο συνδρομητής είχε φραγή, μόλις την καταβάλει θα μπορεί να γίνει άρση της φραγής.<br><b>Δεν ξεχνώ:</b><br><br>Διακανονισμοί δόσεων γίνονται δεκτοί για ποσά μεγαλύτερα των 100 ευρώ<br>Διακανονισμός με δόσεις μπορεί να δοθεί μόνο μία (1) φορά το χρόνο <br>Διακανονισμός με δόσεις δε μπορεί να γίνει σε συνδρομητές με credit segment P & 0, που είναι ενταγμένοι σε ενεργή (active) Port Out καμπάνια και Medium/ Low που συμμετέχουν στην καμπάνια NBA_PAYMENT_EXTENSION_XXXxx <br>Ο διακανονισμός καταχωρείται πάντα για το σύνολο του οφειλώμενου ποσού (ληξιπρόθεσμου και μη)<br>Παράλληλα με την καταβολή των δόσεων, οι νέοι λογαριασμοί που εκδίδονται θα πρέπει να εξοφλούνται έως την ημερομηνία λήξης τους<br>Σε περιπτώσεις όπου το ποσό πληρωμής υπερβαίνει τα 500€ ενημερώνω τον συνδρομητή ότι η πληρωμή δεν μπορεί να γίνει με μετρητά<br>Στην περίπτωση συνδρομητών με Δόσεις Συσκευής στο λογαριασμό ενημερώνουμε ότι δεν είναι εφικτός διακανονισμός με δόσεις καθώς η οφειλή περιλαμβάνει ήδη δόσεις και προτείνουμε εναλλακτικά να κάνει πληρωμή με πιστωτική κάρτα και να βάλει τις δόσεις στην τράπεζα άτοκα",position:1}); 
@@ -437,7 +440,7 @@ ExecuteOrDelayUntilScriptLoaded(initializeCalculator, "sp.js");
              
         function open_third_menu(innercategory) 
         { 
-
+            globalcategory = innercategory ; 
             if(innercategory == "No Segmentation/ Bad Payer") 
                 { 
                     jQ112(".main_menu_div").hide(500); 
@@ -470,6 +473,15 @@ ExecuteOrDelayUntilScriptLoaded(initializeCalculator, "sp.js");
             InitializeMainMenu(option); 
             globalsegment = segment; 
             globaloption = option; 
+            if (globalsegment == 'Κινητή') {
+                jQ112("#connection_type_sms_mobile").prop('checked', true); 
+                jQ112("#connection_type_sms_fixed").prop('checked', false); 
+            }
+            if (globalsegment == 'Σταθερή') {
+                jQ112("#connection_type_sms_mobile").prop('checked', false); 
+                jQ112("#connection_type_sms_fixed").prop('checked', true); 
+            }
+            
             jQ112(".main_menu_div").hide(100); 
 
             user_option = option; 
@@ -506,17 +518,18 @@ ExecuteOrDelayUntilScriptLoaded(initializeCalculator, "sp.js");
                     jQ112("#titlos_div").html("Υπολογισμός δόσεων"); 
                     jQ112(".diakanonismoi_div").css("display","block"); 
                     jQ112("#diakanonismoi_table").css("display","block"); 
-                    jQ112("#tipos_gramis_sms").css("display","block"); 
+                  //</br></br>  jQ112("#tipos_gramis_sms").css("display","block"); 
                     
                     var firstvalue= jQ112("#plithos_doseon").first().val();  // το φτιάχνω Αργότερα , για να εμφανίζουμε το πρώτο option κάθε φορά που φορτώνει 
 
+jQ112('#poso_diakanonismou').unbind(); 
                     jQ112('#poso_diakanonismou').change(function()  {    // Δηλώνουμε event στο select button 
                         if(jQ112( "#plithos_doseon option:selected" ).val()!= "1") 
                            { 
                                 ResultAcceptance(option,segment,null,null); 
                            } 
                     }); 
-                     
+                    jQ112('#poso_diakanonismou').unbind(); 
                     jQ112('#plithos_doseon').on("change",function()  {    // Δηλώνουμε event στο select button 
                                ResultAcceptance(option,segment,null,null);                     
                     }); 
@@ -589,21 +602,21 @@ ExecuteOrDelayUntilScriptLoaded(initializeCalculator, "sp.js");
                     jQ112(".cal_div").show(); 
                     jQ112(".diakanonismoi_div").hide(); 
                     jQ112("#outer_days_div").show(); 
-                    jQ112("#outer_result_div").show(); 
+                    // jQ112("#outer_result_div").show();  // Αλλαγή: Έχει γίνει πλέον από το css: always hidden 
                     jQ112("#outer_sms_tool_div").css("display" ,"none"); // κρύβουμε το sms tool 
                     jQ112("#lektikoSR_div").css("display" ,"none"); 
-                    jQ112("#tipos_gramis_sms").css("display","none"); 
-                    jQ112("#actions_div").hide(); 
+                //</br></br>    jQ112("#tipos_gramis_sms").css("display","none");  always hidden 
+                  //</br></br>  jQ112("#actions_div").hide();  always hidden 
                 } 
             else  // Διακανονισμοί 
             { 
                     jQ112(".cal_div").hide();  // κρύβουμε το div του ημερολογίου 
                     jQ112("#days_acceptance_div").hide(); 
                     jQ112("#outer_days_div").hide(); 
-                    jQ112("#outer_result_div").hide(); 
+                    //jQ112("#outer_result_div").hide();   //// Αλλαγή: Έχει γίνει πλέον από το css: always hidden
                     jQ112("#outer_sms_tool_div").css("display" ,"none"); // κρύβουμε το sms tool 
                     jQ112("#lektikoSR_div").css("display" ,"none"); 
-                    jQ112("#actions_div").hide(); 
+                 //</br></br>   jQ112("#actions_div").hide(); 
             } 
         } 
      
@@ -765,6 +778,30 @@ return 0;
                                             acceptance_status =true; 
                                         } 
                                     break; 
+									case "Σταθερή":  // ίδιο με το SAM
+                                    if(days > acceptedDays) // Ο κανόνας που έχει τεθεί ανα segment 
+                                        { 
+                                            jQ112("#inner_result_div").append('<img id="resultImg" src="http://infoportal.vodafone.com/CommonFiles/Images/Ebacus2/no.png" width="40px" height="40px" />'); 
+                                            acceptance_status =false; 
+                                        } 
+                                    else 
+                                        { 
+                                            jQ112("#inner_result_div").append('<img id="resultImg" src="http://infoportal.vodafone.com/CommonFiles/Images/Ebacus2/yes.png" width="40px" height="40px" />'); 
+                                            acceptance_status =true; 
+                                        } 
+                                    break; 
+									case "Κινητή":  // ίδιο με το SAM
+                                    if(days > acceptedDays) // Ο κανόνας που έχει τεθεί ανα segment 
+                                        { 
+                                            jQ112("#inner_result_div").append('<img id="resultImg" src="http://infoportal.vodafone.com/CommonFiles/Images/Ebacus2/no.png" width="40px" height="40px" />'); 
+                                            acceptance_status =false; 
+                                        } 
+                                    else 
+                                        { 
+                                            jQ112("#inner_result_div").append('<img id="resultImg" src="http://infoportal.vodafone.com/CommonFiles/Images/Ebacus2/yes.png" width="40px" height="40px" />'); 
+                                            acceptance_status =true; 
+                                        } 
+                                    break; 
                                      
                                 case "SoHo":  
                                     if(days > acceptedDays) // Ο κανόνας που έχει τεθεί ανα segment 
@@ -801,7 +838,7 @@ return 0;
                                 energies += '</ul>'; 
                                 jQ112(".main_menu_div").show(500, function() { 
                                 jQ112("#actions_div_inner").html(energies); 
-                                jQ112("#actions_div").show(); 
+                              //</br></br>  jQ112("#actions_div").show(); always hidden 
                                 }); 
                             }
                             else // Αν η παράταση δεν είναι αποδεκτή τότε κλείνουμε βγάζουμε alert message και κλείνουμε τα actions αν είναι απο πριν ανοιχτά
@@ -810,7 +847,7 @@ return 0;
                                 //alert("Μη αποδεκτό περιθώριο παράτασης. \nΠαρακαλώ επιλέξτε αποδεκτή ημερομηνία παράτασης.");
                                     //}
                                 //);
-                                jQ112("#actions_div").hide(); 
+                            //    jQ112("#actions_div").hide();  always hidden 
                                 
                             }
                             
@@ -895,7 +932,7 @@ return 0;
 
                                                 jQ112(".main_menu_div").show(500, function() { 
                                                 jQ112("#actions_div_inner").html(energies); 
-                                                jQ112("#actions_div").show(); 
+                                             //</br></br>   jQ112("#actions_div").show(); always hidden 
                                                 }); 
 
                                                     //Θα πρέπει να καλούμε την συνάρτηση που ανοίγει το sms tool 
@@ -920,14 +957,14 @@ return 0;
     {
           jQ112("#outer_sms_tool_div").css("display" ,"none"); // κρύβουμε το sms tool 
           jQ112("#lektikoSR_div").css("display","none"); // κρύβουμε το Div του λεκτικού SR 
-          jQ112("#actions_div").css("display","none"); // κρύβουμε το Div των ενεργειών
+       //</br></br>   jQ112("#actions_div").css("display","none"); // κρύβουμε το Div των ενεργειών  always hidden 
     }
     
     function clearDateFields() // Κλείνουμε τα date πεδία
     {
         jQ112("#inner_days_div").empty();
         jQ112("#inner_result_div").empty();
-        jQ112("#actions_div").hide(); 
+       //</br></br> jQ112("#actions_div").hide(); always hidden 
     }
      
     function checkNumber(poso) 
@@ -1010,7 +1047,8 @@ function fillLektiko(dates,poso_diakanonismou,final_dose,plithos_doseon_value)
                     "5η καταβολή έως " + dates[5] + " για το ποσό των " + final_dose + " ευρώ" + "\n"; 
             }
 
-        if((globalsegment != "SoHo")&&((jQ112("input[name='connection_type_sms']:checked").val()) == "mobile"))
+    //</br></br>    if((globalsegment != "SoHo")&&((jQ112("input[name='connection_type_sms']:checked").val()) == "mobile"))
+    if (globalcategory == "Κινητή")
             {
 
                 lektiko_string += "Ενημερώθηκε για ενεργοποίηση BRI - BRR – BPRV.\n";
@@ -1090,14 +1128,14 @@ function fillLektiko(dates,poso_diakanonismou,final_dose,plithos_doseon_value)
 </script> 
 <script> 
      
-$(document).ready(function(){ 
+// $(document).ready(function(){ 
        
-    jQ112("input[name='connection_type_sms']").change(function(){  // Αν πατηθεί το αφορά κινητή /σταθερή πηγαίνει στην ResultAcceptance() 
-    if(this.checked){ 
-       $("input[name='connection_type_sms']:checked").not(this).prop('checked', false); 
-    }    
-    ResultAcceptance(globaloption,globalsegment,null,null);  // Πηγαίνει στην ResultAcceptance 
-  }); 
+//     jQ112("input[name='connection_type_sms']").change(function(){  // Αν πατηθεί το αφορά κινητή /σταθερή πηγαίνει στην ResultAcceptance() 
+//     if(this.checked){ 
+//        $("input[name='connection_type_sms']:checked").not(this).prop('checked', false); 
+//     }    
+//     ResultAcceptance(globaloption,globalsegment,null,null);  // Πηγαίνει στην ResultAcceptance 
+//   }); 
         
 }); 
      
@@ -1359,6 +1397,7 @@ $(document).ready(function(){
 		border:2px solid #eee;
 		box-shadow: 0px 2px 7px rgba(0,0,0,0.5);
 		background: white;
+		display:none; 
     } 
       
     #inner_result_div 
@@ -1397,6 +1436,7 @@ $(document).ready(function(){
         width: 100%; 
         height: auto; 
         overflow: visible;
+        display: none; 
     }
     
     #tipos_gramis_inner_sms
@@ -1706,6 +1746,17 @@ $(document).ready(function(){
     { 
         display: none; 
     }
+	
+table.diakanonismos_actions , td, th 
+{  border: 1px solid;
+  width: 50%;
+  border-collapse: collapse;
+  text-align:center;
+}
+th.diakanonismos_actions { background-color:#ccc} 
+
+tr.diakanonismos_actions:nth-child(odd) { background-color:#eee} 
+
 
 </style>   
 
@@ -1767,13 +1818,14 @@ $(document).ready(function(){
                             <td>
                                 <input type="text" id="poso_diakanonismou" style="width: 100px;"  autocomplete="off">
                                 <span style="font-size:19px">&#8364;</span>
-                                <div class="tooltip"><img style="cursor: pointer;" id="infoimg" src="/CommonFiles/Images/New_Abacus/info.png" alt="" width="17px" />
+                           <!--     <div class="tooltip"><img style="cursor: pointer;" id="infoimg" src="/CommonFiles/Images/New_Abacus/info.png" alt="" width="17px" />
                                 <span class="tooltiptext"><table class="infotable" border="1" cellpadding="5">
                                     <th colspan="5">Πίνακας Αποδοχής Δόσεων</th>
                                     <tr><td>Ποσό</td><td>100-199&#8364;</td><td>200-499&#8364;</td><td>500-699&#8364;</td><td>700&#8364; +</td></tr>
                                     <tr><td>Δόσεις</td><td>2</td><td>εως 3</td><td>εως 4</td><td>εως 5</td></tr>
                                 </table></span>
-                                </div>
+                                </div> --> 
+                                </input>
                             </td>
                         </tr> 
                         <tr> 
@@ -1802,24 +1854,24 @@ $(document).ready(function(){
                         </tbody>
                     </table>
                 
-                <div id = "tipos_gramis_sms" > 
+                 <div id = "tipos_gramis_sms" > 
                     <div class = "header_title_div">
                     Τύπος Γραμμής
                     </div>
                     <div id = "tipos_gramis_inner_sms">
                         <table  style="margin: 0 auto;">
                         <tr>
-                        <td><label><input type="checkbox" class="mygroup3" name="connection_type_sms" value="mobile" checked  />&nbsp; Αφορά κινητή</label></td>    
+                        <td><label><input type="checkbox" class="mygroup3" name="connection_type_sms" id="connection_type_sms_mobile" value="mobile" checked  />&nbsp; Αφορά κινητή</label></td>    
                         </tr>
                         <tr>
                         <td>
-                        <label><input type="checkbox" class="mygroup3" name="connection_type_sms" value="fixed"  />&nbsp; Αφορά σταθερή</label>
+                        <label><input type="checkbox" class="mygroup3" name="connection_type_sms" id="connection_type_sms_fixed"  value="fixed"  />&nbsp; Αφορά σταθερή</label>
                         </td>
                         </tr>
                         </table>
                          
                     </div>
-                </div>
+                </div>  
                 
             <div id="lektikoSR_div">
                <div class="header_title_div"> Λεκτικό SR</div>

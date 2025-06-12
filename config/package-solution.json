@@ -3,7 +3,7 @@
   "solution": {
     "name": "cyta-syndromites-client-side",
     "id": "45c2d71d-2407-454f-bdb3-3c93013042aa",
-    "version": "12.1.0.0",
+    "version": "13.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
